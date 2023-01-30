@@ -55,14 +55,14 @@ def select_period(utilization_value, No_tasks, time_slot, expected_util, dist_of
     util_over = True 
     while while_guard > 0 and (not util_interval_ok or util_over):
         util_over = False
-        periods = []
-        period_divide_exe = []
+        periods = []    # the unit will be ms 
+        periods_by_time_slot = []    # the unit will be number of time slots 
         utilization_arr = utilization_func(utilization_value, No_tasks)
         calc_util = 0 
         for i in range(len(utilization_arr)):
             temp_period = int(fix_exe_time / utilization_arr[i]) # at now we assume exe-time is unit (4.0) to obtain nearest number in next step 
             temp_period = prime_multipliers.nearest_num(temp_period, mat)
-            period_divide_exe.append(temp_period)
+            periods_by_time_slot.append(temp_period)
             correct_period_with_exe_TDMA = int(temp_period * time_slot)
             periods.append(correct_period_with_exe_TDMA) 
             calc_util += float( fix_exe_time / temp_period) # even though the correct period is in correct_period_with_time_slot but for util 
@@ -74,7 +74,7 @@ def select_period(utilization_value, No_tasks, time_slot, expected_util, dist_of
             util_interval_ok = True
         # util_interval_ok = calc_util_ok(period_divide_exe, expected_util, 0.03)
     if while_guard > 0: 
-        return while_guard, periods, utilization_arr
+        return while_guard, periods, periods_by_time_slot, utilization_arr
     else: 
         return (-1,[],[])
     # if length of list is 0 it means the function could not find some valid values for periods
@@ -141,7 +141,7 @@ if __name__ == "__main__":
     # print(util_result)    
 
     # print("sum of utils is : ", res)
-    (w_g, periods, utilization_arr) = select_period(0.05, 40, time_slot, 0.05, 0.02)
+    (w_g, periods, period_TS, utilization_arr) = select_period(0.3, 10, time_slot, 0.3, 0.1)
     print("while guard is : ", w_g)
     print("utilizations are : ", utilization_arr)
     res = 0
@@ -149,6 +149,7 @@ if __name__ == "__main__":
         res += i
     print("sum of utilizations is : ", res)
     print("periods are : ", periods)
+    print("period by time slots are : ", period_TS)
     print("hyper period, mulitplication of periods, result utilization are : ", total_hyper_period(periods))
 
 
