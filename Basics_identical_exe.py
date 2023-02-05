@@ -141,7 +141,7 @@ if __name__ == "__main__":
     # print(util_result)    
 
     # print("sum of utils is : ", res)
-    (w_g, periods, period_TS, utilization_arr) = select_period(0.3, 10, time_slot, 0.3, 0.1)
+    (w_g, periods, period_TS, utilization_arr) = select_period(0.4, 40, time_slot, 0.4, 0.1)
     print("while guard is : ", w_g)
     print("utilizations are : ", utilization_arr)
     res = 0
