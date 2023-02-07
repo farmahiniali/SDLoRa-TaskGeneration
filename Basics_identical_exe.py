@@ -3,7 +3,7 @@ import os
 import random
 import math
 from re import T
-import drift
+# import drift
 import prime_multipliers 
 import LoRa_time_Power_TDMA  
 
@@ -106,31 +106,31 @@ def total_hyper_period(period_list):
 
 # --------------- make tasks  ------------------------
 
-def make_task_list_same_exe (No_tasks, TDMA_exe_time, Aloha_exe_time, period_list, output_file):
-    with open (output_file,'w') as f:
-    #f = open(output_file,'w')
-        calculated_util_default_period = 0
-        calculated_util_new_period = 0
-        needed_num_period = 0 
-        Aloha_util = 0
-        amount_add_time_for_sync = LoRa_time_Power_TDMA.sync_ready_time_on_air + LoRa_time_Power_TDMA.sync_rec_time_on_air
-        for i in range(No_tasks):
-            needed_num_period = drift.needed_num_sync_periods_for_drift_2_time_to_get_err(period_list[i], TDMA_exe_time, LoRa_time_Power_TDMA.safety_guard)
-            accumulate_period = float(TDMA_exe_time / period_list[i])
-            Aloha_util +=  float(Aloha_exe_time / period_list[i])
-            if needed_num_period > 0:
-                new_needed_period = needed_num_period * amount_add_time_for_sync
-                accumulate_period += float(new_needed_period / period_list[i]) 
-            # task = [id, exe, period]
-            task = "{},{},{},{},{},{},{}\n".format(i, TDMA_exe_time, period_list[i], "", "", Aloha_exe_time, period_list[i])
-            f.writelines(task)
-            calculated_util_default_period += float(TDMA_exe_time / period_list[i])
-            calculated_util_new_period += accumulate_period
-        print_calculated_util = "\n\n\n utilization without safty guard is : " + str(Aloha_util) + \
-            " \n utilization after adding safety guard is : " + str(calculated_util_default_period) +\
-            " \n new utilization after sysnchronization is : " + str(calculated_util_new_period) 
-        f.writelines(print_calculated_util)
-    #f.close()
+# def make_task_list_same_exe (No_tasks, TDMA_exe_time, Aloha_exe_time, period_list, output_file):
+#     with open (output_file,'w') as f:
+#     #f = open(output_file,'w')
+#         calculated_util_default_period = 0
+#         calculated_util_new_period = 0
+#         needed_num_period = 0 
+#         Aloha_util = 0
+#         amount_add_time_for_sync = LoRa_time_Power_TDMA.sync_ready_time_on_air + LoRa_time_Power_TDMA.sync_rec_time_on_air
+#         for i in range(No_tasks):
+#             needed_num_period = drift.needed_num_sync_periods_for_drift_2_time_to_get_err(period_list[i], TDMA_exe_time, LoRa_time_Power_TDMA.safety_guard)
+#             accumulate_period = float(TDMA_exe_time / period_list[i])
+#             Aloha_util +=  float(Aloha_exe_time / period_list[i])
+#             if needed_num_period > 0:
+#                 new_needed_period = needed_num_period * amount_add_time_for_sync
+#                 accumulate_period += float(new_needed_period / period_list[i]) 
+#             # task = [id, exe, period]
+#             task = "{},{},{},{},{},{},{}\n".format(i, TDMA_exe_time, period_list[i], "", "", Aloha_exe_time, period_list[i])
+#             f.writelines(task)
+#             calculated_util_default_period += float(TDMA_exe_time / period_list[i])
+#             calculated_util_new_period += accumulate_period
+#         print_calculated_util = "\n\n\n utilization without safty guard is : " + str(Aloha_util) + \
+#             " \n utilization after adding safety guard is : " + str(calculated_util_default_period) +\
+#             " \n new utilization after sysnchronization is : " + str(calculated_util_new_period) 
+#         f.writelines(print_calculated_util)
+#     #f.close()
                 
 
 # ----------------------------   runing this module   ---------------------
@@ -139,7 +139,6 @@ if __name__ == "__main__":
     utilization_arr = []
     periods = []
     # print(util_result)    
-
     # print("sum of utils is : ", res)
     (w_g, periods, period_TS, utilization_arr) = select_period(0.4, 40, time_slot, 0.4, 0.1)
     print("while guard is : ", w_g)

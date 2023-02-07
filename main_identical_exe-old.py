@@ -8,16 +8,20 @@ import LoRa_time_power_Aloha
 distant_from_real_utilizaion = 0.03
 
 os.chdir("./sampleTasks")
-utilizations = [0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
-no_task_list = 10 # for each pair (util,no_node) we choose 10 different task list for (0.05, 5) 1-[0.01, 0.01, 0.01, 0.01, 0.01] 2-[0.005, 0.005,0. 005, 0.005, 0.03] 
-no_nodes = [5, 10, 20, 40]
+# utilizations =[0.072, 0.15, 0.28, 0.41, 0.53, 0.67, 0.8, 0.94, 1.08, 1.23] # [0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+utilizations =[0.072, 0.15, 0.28, 0.41, 0.67, 0.94, 1.23] # [0.05, 0.1, 0.2, 0.3, 0.5, 0.7,0.9]
+# because of our type of making period (just using first 8 prime number to limit the hyper period) to get considered utilization
+# we assign a number bigger than real utilization to achive that , e.g we use 0.94 to get 0.7 utilization  
+util_dict = {0.072:0.05 , 0.15:0.1 , 0.28:0.2 , 0.41:0.3 , 0.53:0.4 , 0.67:0.5 , 0.8:0.6 , 0.94:0.7 , 1.08:0.8, 1.23:0.9}
+# no_tasks_list = [5, 10, 15, 20, 30, 40, 50]
+no_tasks_list = [5, 10, 20, 40]
 counter = 0
 for i in utilizations:
-    for j in no_task_list:
+    for j in no_tasks_list:
         # for p in range(1,11,1):
-        for p in no_nodes:
+        for p in range(1,6,1):
             counter +=1
-            name_of_file = "{:03d}".format(counter) + "-" + str(j) + "_tasks_util_" + str(i) + "_" + str(p) + ".csv" 
+            name_of_file = "{:03d}".format(counter) + "-" + str(j) + "_tasks_util_" + str(util_dict[i]) + "_" + str(p) + ".csv" 
             (guard, period_list, utils) = \
             Basics_identical_exe.select_period(i, j,LoRa_time_Power_TDMA.exe_time, util_dict[i], distant_from_real_utilizaion)
             if len(period_list) == 0:
