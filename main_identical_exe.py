@@ -8,7 +8,7 @@ import LoRa_time_power_Aloha
 distant_from_real_utilizaion = 0.03
 
 os.chdir("./sampleTasks")
-utilizations = [0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+utilizations = [0.05, 0.1]#, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
 no_task_list = 10 # for each pair (util,no_node) we choose 10 different task list for (0.05, 5) 1-[0.01, 0.01, 0.01, 0.01, 0.01] 2-[0.005, 0.005,0. 005, 0.005, 0.03] 
 no_nodes = [5, 10, 20, 40]
 counter = 0
@@ -18,8 +18,8 @@ for i in utilizations:
         for p in no_nodes:
             counter +=1
             name_of_file = "{:03d}".format(counter) + "-" + str(j) + "_tasks_util_" + str(i) + "_" + str(p) + ".csv" 
-            (guard, period_list, utils) = \
-            Basics_identical_exe.select_period(i, j,LoRa_time_Power_TDMA.exe_time, util_dict[i], distant_from_real_utilizaion)
+            (guard, period_list,period_by_timeSlot, utils) = \
+            Basics_identical_exe.select_period(i, p,Basics_identical_exe.time_slot, utilizations[i](1.1), utilizations[i](0.1))
             if len(period_list) == 0:
                 of = open(name_of_file, 'w')
                 of.writelines(" operation was unsuccessful !!! ")
