@@ -52,13 +52,14 @@ def lcm(a, b):
 
 
 # ------------ make periods ------------------------------------
-def select_period(utilization_value, No_tasks, no_exe_slot, time_slot, expected_util, dist_of_real_util):  # input parameter is overall utilization
+def select_period(utilization_value, No_tasks, no_exe_slot, time_slot):#, expected_util, dist_of_real_util):  # input parameter is overall utilization
     # prime matrix is made at the first of this module as 'mat'    
     while_guard = 100
-    util_interval_ok = False
-    util_over = True 
-    while while_guard > 0 and (not util_interval_ok or util_over):
-        util_over = False
+    # util_interval_ok = False
+    # util_over = False 
+    util_not_over = False
+    while while_guard > 0 and not util_not_over:#(not util_interval_ok or util_over):
+        # util_over = False
         periods = []    # the unit will be ms 
         devided_periods_by_time_slot = []    # the unit will be number of time slots 
         utilization_arr = utilization_func(utilization_value, No_tasks)
@@ -72,15 +73,17 @@ def select_period(utilization_value, No_tasks, no_exe_slot, time_slot, expected_
             calc_util += float( no_exe_slot / temp_period) # even though the correct period is in correct_period_with_time_slot but for util 
             # we can still use temp_period 
         while_guard -= 1
-        if calc_util > 1 : # it means utilization is more than 1 that is unacceptable 
-            util_over = True
-        if abs(calc_util - expected_util) < dist_of_real_util:
-            util_interval_ok = True
+        # if calc_util > 1 : # it means utilization is more than 1 that is unacceptable 
+            # util_over = True
+        if calc_util < 1:    
+            util_not_over = True
+        # if abs(calc_util - expected_util) < dist_of_real_util:
+        #     util_interval_ok = True
         # util_interval_ok = calc_util_ok(period_divide_exe, expected_util, 0.03)
     if while_guard > 0: 
         return while_guard, periods, devided_periods_by_time_slot, utilization_arr
     else: 
-        return (-1,[],[])
+        return (-1,[],[],[])
     # if length of list is 0 it means the function could not find some valid values for periods
 
 
@@ -145,9 +148,10 @@ if __name__ == "__main__":
     # util_result = utilization_func(.6, 10)
     utilization_arr = []
     periods = []
+    devid_P_TS = []
     # print(util_result)    
     # print("sum of utils is : ", res)
-    (w_g, periods, devid_P_TS, utilization_arr) = select_period(0.4, 10,No_exe_slot , time_slot, 0.4, 0.1)
+    (w_g, periods, devid_P_TS, utilization_arr) = select_period(0.9, 10, No_exe_slot, time_slot)#, 0.9, 0.1)
     print("while guard is : ", w_g)
     print("utilizations are : ", utilization_arr)
     res = 0
